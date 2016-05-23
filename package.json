@@ -1,0 +1,23 @@
+{
+  "name": "docker-util",
+  "version": "1.0.0",
+  "description": "Utils for running docker containers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shotlom/docker-util.git"
+  },
+  "keywords": [
+    "docker",
+    "utility"
+  ],
+  "author": "Sholto Maud",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shotlom/docker-util/issues"
+  },
+  "homepage": "https://github.com/shotlom/docker-util#readme"
+}
