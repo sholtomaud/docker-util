@@ -2,11 +2,15 @@
 
 A node.js command line utility for building and running  docker containers for development projects.
 
-Docker-util  is designed to be run from npm run scripts so that you get the packageName and packageVersion from your package.json file. This enables you to pick up your project details and embed them in your docker image and containers, giving each project a distinct container.
+# Why
 
-# Commands
+Docker-util  is designed to be run from ```npm run <script>``` so that you get the packageName and packageVersion from your package.json file. This enables you to pick up your project details and embed them in your docker image and containers, giving each project a distinct container.
 
-## Server
+# Constraints
+
+Docker-util makes some assumptions about your development folders.  Specifically that on a client app you build to a folder named 'client'. And your server backend you have  a folder named 'server'. Docker-util then runs against your local folders for your dev containers.
+
+## Server commands
 
 **Build Server:**
 ```bash
@@ -19,7 +23,7 @@ Running a server takes a node version because you may have multiple images which
 >docu  run --task server --node 6
 ```
 
-## Client
+## Client commands
 
 **Build Client:**
 ```bash

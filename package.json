@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docu": "docu build --type server --os centos7 --node 6"
+    "docu": "docu build --task server --os centos7 --node 6 --dockerfile Dockerfile",
+    "docu2": "docu run --task server --node 6"
   },
   "repository": {
     "type": "git",

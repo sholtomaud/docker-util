@@ -1,76 +1,59 @@
 #!/usr/bin/env node --harmony
-var chalk = require('chalk')
-var co = require('co')
-var prompt = require('co-prompt')
-var brogram = require('commander')
-var config = require('./config.json')
-var packageVersion = process.env.npm_package_version
-var packageName = process.env.npm_package_name
-
+const brogram = require('commander')
+const packageVersion = process.env.npm_package_version
+const packageName = process.env.npm_package_name
+const spawn = require('child_process').spawn
 const ASSETS = '/Users/chr/dev/' + packageName
 const TARGET = '/usr/src'
-
-const spawn = require('child_process').spawn
-
-
+const CONTAINER_NAME = packageName + '-' + packageVersion
 
 brogram
   .arguments('<action>')
-  .option('--task <task>', 'Build a docker server or client image')
-  .option('--run <run>', 'Run a docker container')
+  .option('--type <type>', 'type: <client,server>')
   .option('--node <node>', 'Node version')
   .option('--os <os>', 'Linux version [eg. centos7]')
+  .option('--dockerfile <dockerfile>', 'Linux version [eg. centos7]')
   .action(function (action) {
-    console.log('hello world')
+    switch (action.trim()) {
+      case 'build':
+        const buildDocker = spawn('docker', [`${action}`, '--force-rm', '-t', `${brogram.type}/node${brogram.node}:test`, '.'])
+        buildDocker.stdout.on('data', (data) => {
+          process.stdout.write(`${data}`)
+        })
+        buildDocker.stderr.on('data', (data) => {
+          process.stdout.write(`stderr: ${data}`)
+        })
+        buildDocker.on('close', (code) => {
+          console.log(`docu exited with code ${code}`)
+        })
+        break
+      case 'run':
+        spawn('docker', ['stop', `${CONTAINER_NAME}`])
+        spawn('docker', ['rm', `${CONTAINER_NAME}`])
+        const runDocker = spawn('docker', [`${action}`, '-v', `${ASSETS}/${brogram.type}:${TARGET}/${brogram.type}`, '-p', '49164:8000', '--name', `${CONTAINER_NAME}`, '-t', `${brogram.type}/node${brogram.node}:test`])
+        runDocker.stdout.on('data', (data) => {
+          process.stdout.write(`${data}`)
+        })
+        runDocker.stderr.on('data', (data) => {
+          process.stdout.write(`stderr: ${data}`)
+        })
+        runDocker.on('close', (code) => {
+          console.log(`docu exited with code ${code}`)
+        })
+        break
+      case 'clean':
+        const cleanDocker = spawn('docker', ['images', '-a'])
+        const grep = spawn('grep', ['^<none>'])
+        const awk = spawn('grep', ['{print $3}'])
+        const xargs = spawn('xargs', ['docker', 'rmi'])
 
-    if (brogram.task) {
-      // console.log(chalk.bold.cyan(' bs: %j os: %k'), build, os, packageName, packageVersion)
-      console.log(chalk.bold.cyan(' bs: %j os: %k'), action, brogram.type, brogram.os, brogram.node, packageName, packageVersion)
-    }
-    else if (brogram.run) {
-      // console.log('server')
-    }
-    else if (brogram.buildClient) {
-        // docker build --force-rm -t "client/node"+brogram.node+" :latest" .
-      const nodeVersion = brogram.node
-      const docker = spawn('docker', [`build --force-rm -t client/node${nodeVersion}:latest`])
+        cleanDocker.stdout.pipe(grep.stdin)
+        grep.stdout.pipe(awk.stdin)
+        awk.stdout.pipe(xargs.stdin)
+        break
 
-      // docker.stdout.on('data', (data) => {
-      //   console.log(`stdout: ${data}`)
-      // })
-      // docker.stderr.on('data', (data) => {
-      //   console.log(`stderr: ${data}`)
-      // })
-      // docker.on('close', (code) => {
-      //   console.log(`child process exited with code ${code}`)
-      // })
-    }
-    else if (brogram.runClient) {
+      default:
 
     }
-    //
-    // co(function * () {
-    //   var username = yield prompt('username: ')
-    //   var password = yield prompt.password('password: ')
-    //   console.log(chalk.bold.cyan('user: %s pass: %s file: %s'),
-    //     username, password, file)
-    // })
   })
   .parse(process.argv)
-
-
-  // IMAGE_NAME='client/node6:latest'
-  // CONTAINER_NAME="${npm_package_name}_${npm_package_version}"
-  // WEBSITE_ASSETS="/Users/chr/dev/${npm_package_name}/build"
-  // WEBSITE_TARGET="/usr/src/app"
-  //
-  // docker stop ${CONTAINER_NAME}
-  // docker rm ${CONTAINER_NAME}
-  //
-  // if [[ ${OPTIONS} == '--build' ]]; then
-  //     docker build --force-rm -t ${IMAGE_NAME} .
-  // fi
-  //
-  // if [[ ${OPTIONS} == '--watch' ]]; then
-  //     docker run -v ${WEBSITE_ASSETS}:${WEBSITE_TARGET} -p 49162:8000 --name ${CONTAINER_NAME} -t ${IMAGE_NAME}
-  // fi
