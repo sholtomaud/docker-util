@@ -16,14 +16,14 @@ const spawn = require('child_process').spawn
 
 brogram
   .arguments('<action>')
-  .option('--type <type>', 'Build a docker server or client image')
+  .option('--task <task>', 'Build a docker server or client image')
   .option('--run <run>', 'Run a docker container')
   .option('--node <node>', 'Node version')
   .option('--os <os>', 'Linux version [eg. centos7]')
   .action(function (action) {
     console.log('hello world')
 
-    if (brogram.type) {
+    if (brogram.task) {
       // console.log(chalk.bold.cyan(' bs: %j os: %k'), build, os, packageName, packageVersion)
       console.log(chalk.bold.cyan(' bs: %j os: %k'), action, brogram.type, brogram.os, brogram.node, packageName, packageVersion)
     }

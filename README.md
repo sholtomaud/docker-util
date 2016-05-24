@@ -10,10 +10,18 @@ Docker-util  is designed to be run from npm run scripts so that you get the pack
 
 When building or running an image or container you need to specify which node version you're running this as
 
-**Build Server: ** ```>docu  --buildServer --node 6```
+## Server
 
-**Run Server: ** ```>docu  --runServer --node 6```
+**Build Server:** ```>docu  build --task server --node 6 -os centos7```
 
-**Build Client** ```>docu  --buildClient --node 6```
+Running a server takes a node version because you may have multiple images which have different node versions. Be sure to specify which version of node you are running against.
 
-**Run Client** ```>docu  --runClient --node 6```
+**Run Server:** ```>docu  run --task server --node 6```
+
+## Client
+
+**Build Client:** ```>docu  build --task client --node 6 -os centos7```
+
+As with server, running a client takes a node version because you may have multiple images which have different node versions. Be sure to specify which version of node you are running against.
+
+**Run Client** ```>docu  run --taks client --node 6```
