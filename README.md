@@ -16,7 +16,10 @@ When building or running an image or container you need to specify which node ve
 
 Running a server takes a node version because you may have multiple images which have different node versions. Be sure to specify which version of node you are running against.
 
-**Run Server:** ```>docu  run --task server --node 6```
+**Run Server:**
+```bash
+docu  run --task server --node 6
+```
 
 ## Client
 
