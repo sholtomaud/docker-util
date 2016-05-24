@@ -14,20 +14,20 @@ Docker-util makes some assumptions about your development folders.  Specifically
 
 **Build Server:**
 ```bash
->docu  build --task server --node 6 -os centos7
+>docu  build --type server --node 6 -os centos7
 ```
 Running a server takes a node version because you may have multiple images which have different node versions. Be sure to specify which version of node you are running against.
 
 **Run Server:**
 ```bash
->docu  run --task server --node 6
+>docu  run --type server --node 6
 ```
 
 ## Client commands
 
 **Build Client:**
 ```bash
->docu  build --task client --node 6 -os centos7
+>docu  build --type client --node 6 -os centos7
 ```
 
 As with server, running a client takes a node version because you may have multiple images which have different node versions. Be sure to specify which version of node you are running against.
