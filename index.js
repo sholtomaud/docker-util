@@ -9,13 +9,20 @@ const CONTAINER_NAME = packageName + '-' + packageVersion
 
 brogram
   .arguments('<action>')
-  .option('--type <type>', 'type: <client,server>')
-  .option('--node <node>', 'Node version')
-  .option('--os <os>', 'Linux version [eg. centos7]')
-  .option('--dockerfile <dockerfile>', 'Linux version [eg. centos7]')
+  .option('-t','--type <type>', 'type: <client,server>')
+  .option('-n' '--node <node>', 'Node version')
+  .option('-o', '--os <os>', 'Linux version [eg. centos7]')
+  .option('-f', '--dockerfile <dockerfile>', 'Linux version [eg. centos7]')
+  .option('-d', '--devPort <devPort>', 'Port that the container will run at in dev environment [eg. 49164]')
+  .option('-c', '--containerPort <containerPort>', 'Port that the container will run at [eg. 8080]')
+  .option('-c', '--containerPort <containerPort>', 'Port that the container will run at [eg. 8080]')
   .action(function (action) {
+    var devPort = brogram.devPort || autoPort()
+    var containerPort = brogram.containerPort || '8080'
+    var os = brogram.os || 'centos7'
+
     switch (action.trim()) {
-      case 'build':
+      case 'builds':
         const buildDocker = spawn('docker', [`${action}`, '--force-rm', '-t', `${brogram.type}/node${brogram.node}:test`, '.'])
         buildDocker.stdout.on('data', (data) => {
           process.stdout.write(`${data}`)
@@ -30,7 +37,7 @@ brogram
       case 'run':
         spawn('docker', ['stop', `${CONTAINER_NAME}`])
         spawn('docker', ['rm', `${CONTAINER_NAME}`])
-        const runDocker = spawn('docker', [`${action}`, '-v', `${ASSETS}/${brogram.type}:${TARGET}/${brogram.type}`, '-p', '49164:8000', '--name', `${CONTAINER_NAME}`, '-t', `${brogram.type}/node${brogram.node}:test`])
+        const runDocker = spawn('docker', [`${action}`, '-v', `${ASSETS}/${brogram.type}:${TARGET}/${brogram.type}`, '-p', `${devPort}:${containerPort}`, '--name', `${CONTAINER_NAME}`, '-t', `${brogram.type}/node${brogram.node}:test`])
         runDocker.stdout.on('data', (data) => {
           process.stdout.write(`${data}`)
         })
@@ -57,3 +64,11 @@ brogram
     }
   })
   .parse(process.argv)
+
+
+function autoPort(){
+    const info = spawn('docker', ['info'])
+    console.log(info)
+    // info.stdout.pipe(grep.stdin)
+    // var containers =
+}
