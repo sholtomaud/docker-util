@@ -1,6 +1,6 @@
 {
   "name": "docker-util",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Utils for running docker containers",
   "main": "index.js",
   "bin": {
