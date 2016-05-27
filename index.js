@@ -6,12 +6,14 @@ const debug = require('debug')('docu')
 // const config = require('./config')
 const program = require('commander')
 const path = require('path')
-const spawn = require('child_process').spawn
 const packageDir = process.cwd()
 const lib = require('./lib')
-const conf = require(path.join(packageDir, '/package.json'))
+var conf = {}
 conf.packageDir = packageDir
-debug('Contents of package config: ', conf)
+
+fs.exists(path.join(packageDir, '/package.json'), function (exists) {
+  if (exists) conf.pack = require(path.join(packageDir, '/package.json'))
+})
 
 program
   .arguments('<action>')
@@ -24,7 +26,7 @@ program
   .option('-p', '--packageDir <package>', 'Directory where package.json can be found. Defaults to current directory')
   .action(function (action) {
     switch (action.trim()) {
-      case 'init': lib.init(__dirname)
+      case 'init': lib.init(conf, __dirname)
         break
       case 'build': lib.build(conf, action, program)
         break
