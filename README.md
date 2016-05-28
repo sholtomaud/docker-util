@@ -10,6 +10,12 @@ Docker-util  is designed to be run from ```npm run <script>``` so that you get t
 
 Docker-util makes some assumptions about your development folders.  Specifically that on a client app you build to a folder named 'client'. And your server backend you have  a folder named 'server'. Docker-util then runs against your local folders for your dev containers.
 
+## Init
+**Initiate package**
+```bash
+>docu  init --type client
+```
+
 ## Server commands
 
 **Build Server:**
