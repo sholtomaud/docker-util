@@ -10,6 +10,7 @@ const packageDir = process.cwd()
 const lib = require('./lib')
 var conf = {}
 conf.packageDir = packageDir
+conf._dirname = __dirname
 
 fs.exists(path.join(packageDir, '/package.json'), function (exists) {
   if (exists) conf.pack = require(path.join(packageDir, '/package.json'))
@@ -17,16 +18,16 @@ fs.exists(path.join(packageDir, '/package.json'), function (exists) {
 
 program
   .arguments('<action>')
-  .option('-t', '--type <type>', 'type: <client,server>')
-  .option('-n', '--node <node>', 'Node version')
-  .option('-o', '--os <os>', 'Linux version [eg. centos7]')
-  .option('-f', '--dockerfile <dockerfile>', 'Linux version [eg. centos7]')
-  .option('-d', '--devPort <devPort>', 'Port that the container will run at in dev environment [eg. 49164]')
-  .option('-c', '--containerPort <containerPort>', 'Port that the container will run at [eg. 8080]')
-  .option('-p', '--packageDir <package>', 'Directory where package.json can be found. Defaults to current directory')
+  .option('--type <typ>', 'type: <client,server>')
+  .option('--node <node>', 'Node version')
+  .option('--os <os>', 'Linux version [eg. centos7]')
+  .option('--dockerfile <dockerfile>', 'Linux version [eg. centos7]')
+  .option('--devPort <devPort>', 'Port that the container will run at in dev environment [eg. 49164]')
+  .option('--containerPort <containerPort>', 'Port that the container will run at [eg. 8080]')
+  .option('--packageDir <package>', 'Directory where package.json can be found. Defaults to current directory')
   .action(function (action) {
     switch (action.trim()) {
-      case 'init': lib.init(conf, __dirname)
+      case 'init': lib.init(conf, action, program)
         break
       case 'build': lib.build(conf, action, program)
         break
